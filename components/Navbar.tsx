@@ -6,10 +6,10 @@ export default function Navbar() {
       </h1>
 
       <div className="space-x-4">
-        <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/login">Login</a>
+        <a href="/" className="hover:underline">Home</a>
+        <a href="/" className="hover:underline">About</a>
+        <a href="/" className="hover:underline">Dashboard</a>
+        <a href="/" className="hover:underline">Login</a>
       </div>
     </nav>
   );
