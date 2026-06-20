@@ -5,24 +5,72 @@ import Footer from "../components/Footer";
 
 export default function Home() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      <Hero />
+      <main className="flex-grow">
+        <Hero />
 
-      <div className="grid md:grid-cols-2 gap-4 p-6">
-        <Card
-          title="Mountain Homestay"
-          location="Uttarakhand"
-        />
+        <section className="p-8 bg-gray-50">
+          <h2 className="text-3xl font-bold text-center text-green-800 mb-8">
+            Featured Rural Homestays
+          </h2>
 
-        <Card
-          title="Village Retreat"
-          location="Himachal Pradesh"
-        />
-      </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card
+              title="Mountain Homestay"
+              location="Uttarakhand"
+            />
+
+            <Card
+              title="Village Retreat"
+              location="Himachal Pradesh"
+            />
+
+            <Card
+              title="Forest Escape"
+              location="Kerala"
+            />
+          </div>
+        </section>
+
+        <section className="py-12 px-8 text-center">
+          <h2 className="text-3xl font-bold text-green-800">
+            Why Choose RuralStay AI?
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
+            <div className="card-dark bg-green-50 p-6 rounded-xl shadow">
+              <h3 className="font-bold text-xl">
+                AI Recommendations
+              </h3>
+              <p className="mt-2 text-gray-600">
+                Personalized homestays based on your travel preferences.
+              </p>
+            </div>
+
+            <div className="card-dark bg-green-50 p-6 rounded-xl shadow">
+              <h3 className="font-bold text-xl">
+                Authentic Experiences
+              </h3>
+              <p className="mt-2 text-gray-600">
+                Stay with local families and experience rural culture.
+              </p>
+            </div>
+
+            <div className="card-dark bg-green-50 p-6 rounded-xl shadow">
+              <h3 className="font-bold text-xl">
+                Sustainable Tourism
+              </h3>
+              <p className="mt-2 text-gray-600">
+                Support local communities and responsible travel.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
 
       <Footer />
-    </>
+    </div>
   );
 }
