@@ -34,3 +34,59 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## How to Run Backend Locally
+
+### Prerequisites
+
+- Node.js installed
+- npm installed
+
+### Steps
+
+1. Clone the repository
+
+```bash
+git clone <your-github-repository-url>
+```
+
+2. Navigate to the backend folder
+
+```bash
+cd backend
+```
+
+3. Install dependencies
+
+```bash
+npm install
+```
+
+4. Create a `.env` file using `.env.example`
+
+Example:
+
+```env
+PORT=5000
+```
+
+5. Start the backend server
+
+```bash
+npm run dev
+```
+
+The backend server will start at:
+
+```
+http://localhost:5000
+```
+
+### Available API Endpoints
+
+- GET `/api/homestays`
+- GET `/api/homestays/:id`
+- POST `/api/homestays`
+- PUT `/api/homestays/:id`
+- DELETE `/api/homestays/:id`
+- GET `/api/search?q=keyword`
