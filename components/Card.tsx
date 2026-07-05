@@ -1,14 +1,17 @@
 type CardProps = {
   title: string;
   location: string;
+  price: number;
 };
 
 export default function Card({
   title,
   location,
+  price,
 }: CardProps) {
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition">
+
       <img
         src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800"
         alt="Homestay"
@@ -16,6 +19,7 @@ export default function Card({
       />
 
       <div className="p-5">
+
         <h2 className="text-2xl font-bold text-green-800">
           {title}
         </h2>
@@ -24,14 +28,19 @@ export default function Card({
           📍 {location}
         </p>
 
+        <p className="text-green-700 font-semibold mt-2">
+          ₹ {price} / night
+        </p>
+
         <p className="mt-3 text-gray-700">
           Enjoy authentic rural hospitality,
-          traditional food, and scenic landscapes.
+          traditional food and scenic landscapes.
         </p>
 
         <button className="mt-4 bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800">
           View Details
         </button>
+
       </div>
     </div>
   );

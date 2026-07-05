@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const supabase = require("./config/supabase");
 
 const app = express();
 
@@ -10,105 +11,135 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
-let homestays = [
-  {
-    id: 1,
-    name: "Mountain Homestay",
-    location: "Uttarakhand",
-    price: 2500
-  },
-  {
-    id: 2,
-    name: "Village Retreat",
-    location: "Himachal Pradesh",
-    price: 1800
-  }
-];
-
-// Home
+// Home Route
 app.get("/", (req, res) => {
   res.json({ message: "Backend Running Successfully!" });
 });
 
-// 1. GET ALL
-app.get("/api/homestays", (req, res) => {
-  res.status(200).json(homestays);
-});
 
-// 2. GET SINGLE
-app.get("/api/homestays/:id", (req, res) => {
-  const homestay = homestays.find(
-    h => h.id == req.params.id
-  );
+// =============================
+// 1. GET ALL HOMESTAYS
+// =============================
+app.get("/api/homestays", async (req, res) => {
+  const { data, error } = await supabase
+    .from("homestays")
+    .select("*");
 
-  if (!homestay) {
-    return res.status(404).json({
-      message: "Homestay not found"
-    });
+  if (error) {
+    return res.status(500).json(error);
   }
 
-  res.status(200).json(homestay);
+  res.status(200).json(data);
 });
 
-// 3. POST
-app.post("/api/homestays", (req, res) => {
 
-  const newHomestay = {
-    id: homestays.length + 1,
-    name: req.body.name,
-    location: req.body.location,
-    price: req.body.price
-  };
+// =============================
+// 2. GET SINGLE HOMESTAY
+// =============================
+app.get("/api/homestays/:id", async (req, res) => {
 
-  homestays.push(newHomestay);
+    const { data, error } = await supabase
+        .from("homestays")
+        .select("*")
+        .eq("id", req.params.id)
+        .single();
 
-  res.status(201).json(newHomestay);
+    if (error) {
+        return res.status(404).json(error);
+    }
+
+    res.status(200).json(data);
 });
 
-// 4. PUT
-app.put("/api/homestays/:id", (req, res) => {
 
-  const homestay = homestays.find(
-    h => h.id == req.params.id
-  );
+// =============================
+// 3. CREATE HOMESTAY
+// =============================
+app.post("/api/homestays", async (req, res) => {
 
-  if (!homestay) {
-    return res.status(404).json({
-      message: "Homestay not found"
+    const { data, error } = await supabase
+        .from("homestays")
+        .insert([
+            {
+                name: req.body.name,
+                location: req.body.location,
+                price: req.body.price
+            }
+        ])
+        .select();
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
+    res.status(201).json(data);
+});
+
+
+// =============================
+// 4. UPDATE HOMESTAY
+// =============================
+app.put("/api/homestays/:id", async (req, res) => {
+
+    const { data, error } = await supabase
+        .from("homestays")
+        .update({
+            name: req.body.name,
+            location: req.body.location,
+            price: req.body.price
+        })
+        .eq("id", req.params.id)
+        .select();
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
+    res.status(200).json(data);
+});
+
+// =============================
+// 5. DELETE HOMESTAY
+// =============================
+app.delete("/api/homestays/:id", async (req, res) => {
+
+    const { error } = await supabase
+        .from("homestays")
+        .delete()
+        .eq("id", req.params.id);
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
+    res.status(200).json({
+        message: "Homestay deleted successfully"
     });
-  }
-
-  homestay.name = req.body.name;
-  homestay.location = req.body.location;
-  homestay.price = req.body.price;
-
-  res.status(200).json(homestay);
 });
 
-// 5. DELETE
-app.delete("/api/homestays/:id", (req, res) => {
+// =============================
+// 6. SEARCH HOMESTAYS
+// =============================
+app.get("/api/search", async (req, res) => {
 
-  homestays = homestays.filter(
-    h => h.id != req.params.id
-  );
+    const q = req.query.q || "";
 
-  res.status(204).send();
+    const { data, error } = await supabase
+        .from("homestays")
+        .select("*")
+        .ilike("name", `%${q}%`);
+
+    if (error) {
+        return res.status(400).json(error);
+    }
+
+    res.status(200).json(data);
 });
 
-// 6. SEARCH
-app.get("/api/search", (req, res) => {
 
-  const q = req.query.q?.toLowerCase() || "";
-
-  const result = homestays.filter(
-    h =>
-      h.name.toLowerCase().includes(q) ||
-      h.location.toLowerCase().includes(q)
-  );
-
-  res.status(200).json(result);
-});
-
+// =============================
+// START SERVER
+// =============================
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

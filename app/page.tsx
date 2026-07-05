@@ -52,6 +52,7 @@ export default function Home() {
                   key={stay.id}
                   title={stay.name}
                   location={stay.location}
+                  price={stay.price}
                 />
               ))}
             </div>
