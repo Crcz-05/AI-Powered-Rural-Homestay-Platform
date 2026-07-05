@@ -90,3 +90,70 @@ http://localhost:5000
 - PUT `/api/homestays/:id`
 - DELETE `/api/homestays/:id`
 - GET `/api/search?q=keyword`
+
+---
+
+# Database Choice
+
+This project uses **Supabase (PostgreSQL)** as the cloud database.
+
+### Why Supabase?
+
+- Free cloud PostgreSQL database
+- Easy integration with Express.js
+- Supports CRUD operations
+- No local database installation required
+- Easy deployment with Vercel
+
+---
+
+# Database Schema
+
+(Add your schema diagram image here after creating it.)
+
+Example:
+
+![Schema Diagram](schema-diagram.png)
+
+---
+
+# Set Up the Database
+
+1. Create a Supabase project.
+2. Create a table named `homestays` with the following columns:
+
+| Column | Type |
+|---------|------|
+| id | bigint (Primary Key) |
+| name | text |
+| location | text |
+| price | integer |
+| created_at | timestamp |
+
+3. Create a `.env` file inside the backend folder.
+
+Example:
+
+```env
+PORT=5000
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_KEY=your_supabase_key
+```
+
+4. Install dependencies:
+
+```bash
+npm install
+```
+
+5. Start the backend:
+
+```bash
+node server.js
+```
+
+6. Start the frontend:
+
+```bash
+npm run dev
+```
