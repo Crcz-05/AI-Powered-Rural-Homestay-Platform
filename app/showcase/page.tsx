@@ -1,60 +1,53 @@
-"use client";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
-import { useState } from "react";
-
-import {
-  Button,
-  Input,
-  Modal,
-  Toast,
-  Loader,
-} from "../../components/ui";
-
-export default function ShowcasePage() {
-  const [name, setName] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-
+export default function Showcase() {
   return (
-    <div className="p-8 space-y-6">
-      <h1 className="text-3xl font-bold">
-        Component Library Showcase
-      </h1>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
 
-      <Button
-        variant="primary"
-        onClick={() => setShowModal(true)}
-      >
-        Open Modal
-      </Button>
+      <main className="flex-grow bg-gray-50 p-10">
+        <h1 className="text-4xl font-bold text-green-800 mb-6">
+          RuralStay AI Showcase
+        </h1>
 
-      <Input
-        label="Name"
-        placeholder="Enter your name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+        <p className="text-lg text-gray-700 mb-8">
+          Explore the key features of our AI-powered Rural Homestay Booking Platform.
+        </p>
 
-      <Button
-        variant="secondary"
-        onClick={() => setShowToast(true)}
-      >
-        Show Toast
-      </Button>
+        <div className="grid md:grid-cols-3 gap-6">
 
-      <Loader />
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h2 className="text-xl font-semibold text-green-700">
+              AI Recommendations
+            </h2>
+            <p className="mt-3 text-gray-600">
+              Smart recommendations based on your travel preferences.
+            </p>
+          </div>
 
-      <Modal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        title="Demo Modal"
-      >
-        <p>This is a modal component.</p>
-      </Modal>
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h2 className="text-xl font-semibold text-green-700">
+              Rural Homestays
+            </h2>
+            <p className="mt-3 text-gray-600">
+              Discover authentic village stays across India.
+            </p>
+          </div>
 
-      {showToast && (
-        <Toast message="Toast Notification!" />
-      )}
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h2 className="text-xl font-semibold text-green-700">
+              Secure Booking
+            </h2>
+            <p className="mt-3 text-gray-600">
+              Book your favorite homestay with a secure authentication system.
+            </p>
+          </div>
+
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 }

@@ -1,13 +1,31 @@
 require("dotenv").config();
 
+const rateLimit = require("express-rate-limit");
+const authMiddleware = require("./middleware/authMiddleware");
 const express = require("express");
 const cors = require("cors");
 const supabase = require("./config/supabase");
+const authRoutes = require("./routes/auth");
+//const authMiddleware = require("./middleware/authMiddleware");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+
+  max: 5,
+
+  message: {
+    message: "Too many requests. Please try again after 15 minutes.",
+  },
+
+  standardHeaders: true,
+
+  legacyHeaders: false,
+});
+app.use("/api/auth", authLimiter, authRoutes);
 
 const PORT = process.env.PORT || 5000;
 
@@ -20,7 +38,7 @@ app.get("/", (req, res) => {
 // =============================
 // 1. GET ALL HOMESTAYS
 // =============================
-app.get("/api/homestays", async (req, res) => {
+app.get("/api/homestays",  async (req,res)=>{
   const { data, error } = await supabase
     .from("homestays")
     .select("*");
@@ -55,7 +73,7 @@ app.get("/api/homestays/:id", async (req, res) => {
 // =============================
 // 3. CREATE HOMESTAY
 // =============================
-app.post("/api/homestays", async (req, res) => {
+app.post("/api/homestays", authMiddleware, async (req, res) => {
 
     const { data, error } = await supabase
         .from("homestays")
@@ -79,7 +97,7 @@ app.post("/api/homestays", async (req, res) => {
 // =============================
 // 4. UPDATE HOMESTAY
 // =============================
-app.put("/api/homestays/:id", async (req, res) => {
+app.put("/api/homestays/:id", authMiddleware, async (req, res) => {
 
     const { data, error } = await supabase
         .from("homestays")
@@ -101,7 +119,7 @@ app.put("/api/homestays/:id", async (req, res) => {
 // =============================
 // 5. DELETE HOMESTAY
 // =============================
-app.delete("/api/homestays/:id", async (req, res) => {
+app.delete("/api/homestays/:id", authMiddleware,async (req, res) => {
 
     const { error } = await supabase
         .from("homestays")
@@ -136,6 +154,17 @@ app.get("/api/search", async (req, res) => {
     res.status(200).json(data);
 });
 
+// =============================
+// PROTECTED PROFILE ROUTE
+// =============================
+app.get("/api/profile", authMiddleware, (req, res) => {
+
+    res.status(200).json({
+        message: "Welcome!",
+        user: req.user
+    });
+
+});
 
 // =============================
 // START SERVER

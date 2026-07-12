@@ -1,12 +1,32 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 export default function About() {
+
+  const router = useRouter();
+
+  useEffect(() => {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.push("/login");
+    }
+
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
+
       <Navbar />
 
       <main className="flex-grow p-10 bg-gray-50">
+
         <h1 className="text-4xl font-bold text-green-800 mb-6">
           About RuralStay AI
         </h1>
@@ -18,7 +38,8 @@ export default function About() {
           based on traveler preferences, budget, and interests.
         </p>
 
-        <div  className="card-dark mt-8 bg-white p-6 rounded-xl shadow">
+        <div className="card-dark mt-8 bg-white p-6 rounded-xl shadow">
+
           <h2 className="text-2xl font-semibold mb-3">
             Our Mission
           </h2>
@@ -28,10 +49,13 @@ export default function About() {
             communities by connecting travelers with unique and
             authentic homestay experiences.
           </p>
+
         </div>
+
       </main>
 
       <Footer />
+
     </div>
   );
 }

@@ -4,32 +4,35 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { supabase } from "../../lib/supabase";
 
-export default function Login() {
+export default function Register() {
   const router = useRouter();
 
+  const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
     setLoading(true);
     setError("");
+    setSuccess("");
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/login",
+        "http://localhost:5000/api/auth/register",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            fullname,
             email,
             password,
           }),
@@ -39,33 +42,22 @@ export default function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message);
+        setError(data.message || "Registration failed");
         setLoading(false);
         return;
       }
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      setSuccess("Registration successful! Redirecting to Login...");
 
-      router.push("/dashboard");
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
     } catch (err) {
       setError("Unable to connect to server.");
     }
 
     setLoading(false);
   };
-  const handleGoogleLogin = async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: "http://localhost:3000/dashboard",
-    },
-  });
-
-  if (error) {
-    alert(error.message);
-  }
-};
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -76,10 +68,22 @@ export default function Login() {
         <div className="card-dark bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
 
           <h1 className="text-3xl font-bold text-green-800 mb-6 text-center">
-            Login
+            Create Account
           </h1>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form
+            onSubmit={handleRegister}
+            className="space-y-4"
+          >
+
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={fullname}
+              onChange={(e) => setFullname(e.target.value)}
+              className="w-full border p-3 rounded-lg"
+              required
+            />
 
             <input
               type="email"
@@ -105,30 +109,31 @@ export default function Login() {
               </p>
             )}
 
+            {success && (
+              <p className="text-green-700 text-sm">
+                {success}
+              </p>
+            )}
+
             <button
               type="submit"
               disabled={loading}
               className="w-full bg-green-700 text-white py-3 rounded-lg hover:bg-green-800"
             >
-              {loading ? "Signing In..." : "Sign In"}
+              {loading ? "Creating Account..." : "Register"}
             </button>
-            <button
-  type="button"
-  onClick={handleGoogleLogin}
-  className="w-full mt-3 border border-gray-300 py-3 rounded-lg hover:bg-gray-100"
->
-  Continue with Google
-</button>
+
           </form>
 
-          <p className="text-center mt-5 text-gray-600">
-            New user?
+          <p className="text-center mt-5">
+
+            Already have an account?
 
             <a
-              href="/register"
+              href="/login"
               className="text-green-700 font-semibold ml-2"
             >
-              Register
+              Login
             </a>
 
           </p>
