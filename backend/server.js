@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const aiRoutes = require("./routes/ai");
 const rateLimit = require("express-rate-limit");
 const authMiddleware = require("./middleware/authMiddleware");
 const express = require("express");
@@ -26,6 +27,7 @@ const authLimiter = rateLimit({
   legacyHeaders: false,
 });
 app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api/ai", aiRoutes);
 
 const PORT = process.env.PORT || 5000;
 
